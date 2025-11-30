@@ -1,0 +1,2 @@
+FROM python:3.9-slim
+CMD ["python", "-m", "http.server", "8080"]
