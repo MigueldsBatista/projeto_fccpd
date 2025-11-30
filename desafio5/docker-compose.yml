@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  users:
+    build: ./service_users
+    environment:
+      - SERVICE_NAME=users
+      - INSTANCE_ID=1
+    volumes:
+      - logs:/app/logs
+    networks:
+      - app-network
+
+  orders:
+    build: ./service_orders
+    environment:
+      - SERVICE_NAME=orders
+      - INSTANCE_ID=1
+    volumes:
+      - logs:/app/logs
+    networks:
+      - app-network
+
+  gateway:
+    build: ./reverse_proxy
+    ports:
+      - "8080:8080"
+    depends_on:
+      - users
+      - orders
+    networks:
+      - app-network
+
+volumes:
+  logs:
+  data:
+
+networks:
+  app-network:
+    driver: bridge
